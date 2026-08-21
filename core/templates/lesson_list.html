@@ -1,0 +1,72 @@
+
+{% extends 'base.html' %}
+
+{% block title %}Lessons{% endblock %}
+
+{% block content %}
+
+<div class="lessons-container">
+
+    <div class="lessons-header">
+        <h2> Lessons</h2>
+        <p>Explore your course lessons and learning materials.</p>
+    </div>
+
+    <div class="lessons-list">
+
+        {% for lesson in lessons %}
+
+        <div class="lesson-card">
+
+            <div class="lesson-info">
+                <span class="lesson-number">
+                    Lesson {{ forloop.counter }}
+                </span>
+
+                <h3>{{ lesson.title }}</h3>
+            </div>
+
+            <div class="lesson-resources">
+
+                {% if lesson.video %}
+                    <a href="{{ lesson.video.url }}"
+                       target="_blank"
+                       class="back-btn">
+                        🎥 Video
+                    </a>
+                {% endif %}
+
+                {% if lesson.notes %}
+                    <a href="{{ lesson.notes.url }}"
+                       target="_blank"
+                       class="back-btn">
+                        📄 Notes
+                    </a>
+                {% endif %}
+
+            </div>
+
+        </div>
+
+        {% empty %}
+
+        <div class="empty-lesson">
+            <div class="empty-icon">🌱</div>
+            <h3>No Lessons Available</h3>
+            <p>Your lessons will appear here when they are added.</p>
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+    <div class="back-btn">
+        <a href="{% url 'StudentDashBoard' %}">
+            Back To Student Dashboard
+        </a>
+    </div>
+
+</div>
+
+{% endblock %}
+

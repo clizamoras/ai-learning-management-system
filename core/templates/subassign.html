@@ -1,0 +1,18 @@
+
+{% extends 'base.html' %}
+
+{% block title %}SUBMIT ASSIGNMENT{% endblock %}
+
+{% block content %}
+
+<div class="lesson-container">
+        <h2>SUBMIT ASSIGNMENT</h2>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token%}
+            {{form.as_p}}
+            <button type="submit">SUBMIT</button>
+        </form>
+        <a href="{% url 'StudentDashBoard' %}" class="back-btn">Back To Student Dashboard</a>
+</div>
+
+{% endblock %}

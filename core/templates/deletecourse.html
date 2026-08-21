@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}DELETE COURSE{% endblock %}
+
+{% block content %}
+    <div class="lesson-container">
+        <h2>DELETE COURSE</h2>
+        <h3>Are You Sure You Want To Delete This Course ?</h3>
+        <form method="POST">
+            {% csrf_token%}
+            {{form.as_p}}
+            <button type="submit">Yes Delete</button>
+        </form>
+        <a href="{% url 'TeacherDashBoard' %}" class="back-btn">Back To Teacher DashBoard</a>
+    </div>
+{% endblock %}

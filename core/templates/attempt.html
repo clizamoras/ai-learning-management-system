@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% block title %}ATTEMPT QUIZ{% endblock %}
+
+{% block content %}
+
+<div class="attempt-page">
+
+    <div class="attempt-wrapper">
+
+        <div class="attempt-header">
+
+            <span class="attempt-label">
+                KNOWLEDGE CHECK
+            </span>
+
+            <h2 class="attempt-title">
+                🧠 Attempt Quiz
+            </h2>
+
+            <p class="attempt-subtitle">
+                Select the correct answer for each question.
+            </p>
+
+        </div>
+
+
+        <form method="POST" class="attempt-form">
+
+            {% csrf_token %}
+
+            {% for question in questions %}
+
+            <div class="attempt-question">
+
+                <div class="attempt-number">
+                    {{ forloop.counter }}
+                </div>
+
+                <h3 class="attempt-question-text">
+                    {{ question.question }}
+                </h3>
+
+
+                <div class="attempt-options">
+
+                    {% for option in question.option_set.all %}
+
+                    <label class="attempt-option">
+
+                        <input
+                            type="radio"
+                            name="question_{{ question.id }}"
+                            id="option_{{ option.id }}"
+                            value="{{ option.id }}"
+                        >
+
+                        <span class="attempt-option-circle"></span>
+
+                        <span class="attempt-option-text">
+                            {{ option.option_text }}
+                        </span>
+
+                    </label>
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+
+            <div class="attempt-submit-area">
+
+                <button
+                    type="submit"
+                    class="back-btn"
+                >
+                    Submit Quiz ✨
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

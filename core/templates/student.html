@@ -1,0 +1,230 @@
+
+{% extends 'base.html' %}
+
+{% block title %}STUDENT DASHBOARD{% endblock %}
+
+{% block content %}
+
+<div class="student-dashboard">
+
+    <!-- Header -->
+
+    <div class="student-header">
+        <h1>Student Dashboard</h1>
+        <p>Welcome back! Continue your learning journey 🌸</p>
+    </div>
+
+
+    <!-- Quick Actions -->
+
+    <div class="action-grid">
+        
+        <a href="{% url 'CreateEnrollement' %}" class="action-card">
+            <span class="action-icon">🎓</span>
+            <h3>Enroll in Course</h3>
+            <p>Enroll in a new course</p>
+            
+        </a>
+        <a href="{% url 'ViewLesson' %}" class="action-card">
+            <span class="action-icon">📚</span>
+            <h3>View Lessons</h3>
+            <p>Explore your course lessons</p>
+        </a>
+
+        <a href="{% url 'SubmitAssignment' %}" class="action-card">
+            <span class="action-icon">📤</span>
+            <h3>Submit Assignment</h3>
+            <p>Upload your assignments</p>
+        </a>
+
+        <a href="{% url 'ViewQuiz' %}" class="action-card">
+            <span class="action-icon">🧠</span>
+            <h3>View Quiz</h3>
+            <p>Check available quizzes</p>
+        </a>
+
+        <a href="{% url 'ViewProgress' %}" class="action-card">
+            <span class="action-icon">📈</span>
+            <h3>View Progress</h3>
+            <p>Track your learning progress</p>
+        </a>
+
+        <a href="{% url 'ViewResult' %}" class="action-card">
+            <span class="action-icon">🏆</span>
+            <h3>View Results</h3>
+            <p>Check your quiz results</p>
+        </a>
+
+    </div>
+    <div class="logout-section">
+    <a href="{% url 'assistant' %}" class="back-btn">
+        <h3>Do You Wish To Use The 🤖 AI Assistant</h3>
+    </a>
+    </div>
+    <!-- Available Quizzes -->
+   <br>
+    <section class="dashboard-section">
+
+    <div class="section-heading">
+        <h2>Announcements</h2>
+    </div>
+
+    <div class="quiz-list">
+
+        {% for announcement in announcements %}
+
+        <div class="quiz-card">
+
+            <div>
+                <h3>{{ announcement.title }}</h3>
+                <p>{{ announcement.content }}</p>
+                <small>{{ announcement.date }}</small>
+            </div>
+
+        </div>
+
+        {% empty %}
+
+        <div class="empty-course">
+            <h3>No announcements yet 🌱</h3>
+            <p>There are no announcements available right now.</p>
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+    <section class="dashboard-section">
+
+        <div class="section-heading">
+            <h2>Available Quizzes</h2>
+        </div>
+
+        <div class="quiz-list">
+
+            {% for quiz in quizzes %}
+
+            <div class="quiz-card">
+
+                <div>
+                    <h3>{{ quiz.title }}</h3>
+                    <p>Ready to test your knowledge?</p>
+                </div>
+
+                <a href="{% url 'AttemptQuiz' quiz.pk %}"
+                   class="quiz-btn">
+                    Attempt Quiz →
+                </a>
+
+            </div>
+
+            {% empty %}
+
+            <div class="empty-course">
+                <h3>No quizzes yet 🌱</h3>
+                <p>There are no quizzes available right now.</p>
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </section>
+
+    <section class="dashboard-section">
+
+    <div class="section-heading">
+        <h2>Assignment</h2>
+    </div>
+
+    <div class="quiz-list">
+
+        {% for subassign in subassigns %}
+
+        <div class="quiz-card">
+
+            <div>
+                <h3>{{ subassign.assignment.title }}</h3>
+                <p>marks for the assignment :{{subassign.marks}}</p>
+                <p>{{ subassign.submitteddate}}</p>
+                <a href="{{subassign.file.urls}}" target="_blank" class="back-btn">
+                    📄 Submitted File
+                </a>
+            </div>
+
+        </div>
+
+        {% empty %}
+
+        <div class="empty-course">
+            <h3>No assignments yet 🌱</h3>
+            <p>There are no assignments submitted yet.</p>
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+    <section class="dashboard-section">
+
+        <div class="section-heading">
+            <h2>My Enrolled Courses</h2>
+            <span>{{ courses|length }} Courses</span>
+        </div>
+      
+        <div class="course-grid">
+
+            {% for course in courses %}
+        <div id="course-container">
+            <div class="course-card">
+
+                <div class="course-icon">
+                    📖
+                </div>
+
+                <h3>{{ course.name }}</h3>
+
+                <p class="course-code">
+                    {{ course.code }}
+                </p>
+
+                <a href="{% url 'CourseDetailStudent' course.pk %}" class="course-btn">
+    View Course →
+</a>
+
+            </div>
+
+            {% empty %}
+
+            <div class="empty-course">
+                <h3>No enrolled courses 🌱</h3>
+                <p>Enroll in a course to start learning.</p>
+            </div>
+
+            {% endfor %}
+        </div> 
+        </div>
+        
+        <br>
+    </section>
+
+
+    <div class="logout-section">
+
+        <h3>Do You Wish To Logout?</h3>
+
+        <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit">Logout</button>
+        </form>
+         
+    </div>
+
+
+
+
+
+{% endblock %}
+

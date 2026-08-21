@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}CREATE ANNOUNCEMENT{% endblock %}
+
+{% block content %}
+    <body>
+        <div class="lesson-container">
+        <h2>CREATE ANNOUNCEMENT</h2>
+        <form method="POST" >
+            {% csrf_token %}
+            {{form.as_p}}
+            <button type="submit">Create Announcement</button>
+        </form>
+        <a href="{% url 'TeacherDashBoard' %}" class="back-btn">Back to Dashboard</a>
+    </body>
+    </div>
+{% endblock %}
+</html>

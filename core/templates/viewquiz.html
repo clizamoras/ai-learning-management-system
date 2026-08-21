@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}QUIZ{% endblock %}
+
+{% block content %}
+<div class="submission-container">
+
+    <div class="submission-header">
+        <h2>QUIZ</h2>
+        <p>View and attempt available quizzes.</p>
+    </div>
+    <div class="submission-list">
+
+        {% for quiz in quizes %}
+
+        <div class="submission-card">
+
+            <div class="submission-top">
+                <h3>{{quiz.title}}</h3>
+                <h3>{{quiz.duedate}}</h3>
+            </div>
+
+            
+        
+           </div>
+           <a href="{% url 'AttemptQuiz' quiz.pk %}"
+               class="back-btn">
+                Attempt Quiz
+            </a>
+            </div>
+
+        {% empty %}
+
+        <div class="empty-submission">
+            <h3>No Quizzes Available</h3>
+            <p>There are no quizzes available for students to attempt.</p>
+        </div>
+
+        {% endfor %}
+          
+        <a href="{% url 'StudentDashBoard' %}" class="back-btn">Back To Student DashBoard</a>
+ 
+    </div>
+    {% endblock %}

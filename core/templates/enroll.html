@@ -1,0 +1,20 @@
+
+{% extends 'base.html' %}
+
+{% block title %}ENROLLMENT{% endblock %}
+
+{% block content %}
+
+<div class="lesson-container">
+        <h2>ENROLLMENT</h2>
+        <form method="POST" >
+            {% csrf_token %}
+            {{form.as_p}}
+            <button type="submit">Enroll</button>
+        </form>
+        <a href="{% url 'StudentDashBoard' %}" class="back-btn">
+            Back To Student DashBoard
+        </a>
+</div>
+
+{% endblock %}

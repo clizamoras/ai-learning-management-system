@@ -1,0 +1,246 @@
+{% extends 'base.html' %}
+
+{% block title %}AI Assistant{% endblock %}
+
+{% block content %}
+
+
+# chatbox -> input question -> clear chat
+
+<div class="chat-container">
+
+    <h1>🤖 AI Learning Assistant</h1>
+
+    <!-- Chat messages -->
+    <div id="chat-box" class="chat-box">
+
+        {% if messages %}
+
+            {% for message in messages %}
+
+                {% if message.role == "user" %}
+
+                    <div class="message user">  # for the old chat messages
+                        <strong>You:</strong>
+                        <p>{{ message.content }}</p>
+                    </div>
+
+                {% elif message.role == "assistant" %}
+
+                    <div class="message ai">
+                        <strong>🤖 AI:</strong>
+                        <p>{{ message.content }}</p>
+                    </div>
+
+                {% endif %}
+
+            {% endfor %}
+
+        {% else %}
+
+            <p class="empty">Ask me something!</p>
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- Question form -->
+    <form method="POST" id="chat-form">
+
+        {% csrf_token %}
+
+        <input
+            type="text"
+            name="question"
+            id="question"
+            placeholder="Ask something..."
+            autocomplete="off" 
+            required
+        >
+# autocomplete is off such that it tells the browser not to automatically suggest 
+        <button type="submit" id="ask-button">
+            Ask
+        </button>
+
+    </form>
+
+
+    <!-- Clear chat -->
+    <form method="POST">
+
+        {% csrf_token %}
+
+        <button
+            type="submit"
+            name="clear_chat"
+            value="1"
+            class="clear-button">
+
+            Clear Chat
+
+        </button>
+
+    </form>
+
+</div>
+<div class="logout-section">
+
+     <a href="{% url 'StudentDashBoard' %}" class="back-btn">
+        Do You Wish To Go Back to StudentDashBoard ?
+    </a>
+    </div>
+</div>
+
+<script>
+
+const form = document.getElementById("chat-form"); // we are getting the html element whose id is chat-form
+
+const input = document.getElementById("question"); // we are gtting the html element whose id is question
+
+const chatBox = document.getElementById("chat-box"); // we are getting the html element whose id is chat-box
+
+
+const button = document.getElementById("ask-button"); // we are getting the html element whose id is ask-button
+
+
+form.addEventListener("submit", async function(event) {       // this function runs when the form is submitted  async allows u to use await to  wait for django to respond
+                                               
+    event.preventDefault();   // it prevents the normall reloading of the page
+
+
+    const question = input.value.trim();  //it is used to get the text entered by the user and it used to remove unneccessary whitespaces from the begining and the end
+
+
+    if (!question) { 
+        return;
+    }
+
+
+    button.disabled = true;
+
+
+    // Show user's question immediately
+
+    const userMessage =
+        document.createElement("div");  // for the new chat messages
+
+    userMessage.className =
+        "message user";
+
+    userMessage.innerHTML = `
+        <strong>You:</strong>
+        <p></p>
+    `;
+
+    userMessage.querySelector("p").textContent =
+        question;
+
+    chatBox.appendChild(userMessage);
+
+
+    // Show thinking message
+
+    const aiMessage =
+        document.createElement("div");
+
+    aiMessage.className =
+        "message ai";
+
+    aiMessage.innerHTML = `
+        <strong>🤖 AI:</strong>
+        <p>Thinking...</p>
+    `;
+
+    chatBox.appendChild(aiMessage);
+
+
+    // Scroll to bottom
+
+    chatBox.scrollTop =
+        chatBox.scrollHeight;
+
+
+    // CSRF token
+
+    const csrfToken =
+        document.querySelector(
+            "[name=csrfmiddlewaretoken]"
+        ).value;
+
+
+    try {
+
+        const response =
+            await fetch("", {
+
+                method: "POST",
+
+                headers: {
+
+                    "X-CSRFToken":
+                        csrfToken,
+
+                    "Content-Type":
+                        "application/x-www-form-urlencoded"   
+
+                },
+
+                body:
+                    new URLSearchParams({
+
+                        question: question
+
+                    })
+
+            });
+        
+        //it is sending a  post request and csrf is used so that django can check if it is legitimate and it tells the context type is url encoded form data and it also provides the question and sends in a form style
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Something went wrong"
+            );
+
+        }
+
+
+        // Django returns the updated page
+
+        const html =
+            await response.text();
+
+
+        // Replace the page with updated HTML
+
+        document.open();
+
+        document.write(html);
+
+        document.close();
+
+    }
+
+
+    catch (error) {
+
+        console.log(error);
+
+        aiMessage.querySelector("p").textContent =
+            "Sorry, something went wrong.";
+
+        button.disabled = false;
+
+    }
+
+
+    input.value = "";
+
+});
+
+// gettting html elements -> addeventlistner -> preventdefault -> question -> if not question -> button disabled -> 2 innerhtml -> scroll -> csrf -> try -> catch ->input
+</script>
+
+{% endblock %}

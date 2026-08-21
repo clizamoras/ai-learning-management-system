@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block title %}PROGRESS{% endblock %}
+{% block content %}
+<div class="submission-container">
+
+    <div class="submission-header">
+        <h2>PROGRESS</h2>
+        <p>View progress for your students.</p>
+    </div>
+    <div class="submission-list">
+
+         {% for progress in progresses%}
+        <div class="submission-card">
+          <div class="submission-top">
+                <h3>{{progress.course.name}}</h3>
+                <span>Progress</span>
+            </div>
+        
+        <div class="submission-details">
+
+                <div class="detail">
+                    <p>PERCENTAGE :{{progress.progresspercenatge}}</p>
+                
+                    
+                    <p>COMPLETED LESSONS :{{progress.completedlesson}}</p>
+                
+                    
+                    <p>LAST ACCESSSED :{{progress.last_accessed}}</p>
+                </div>
+            </div>
+        </div>
+         
+        {% empty %}
+
+        <div class="empty-submission">
+            <h3>No Progress Available</h3>
+            <p>Your students haven't made any progress yet.</p>
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+    <a href="{% url 'StudentDashBoard' %}" class="back-btn">
+         Back to Student Dashboard
+    </a>
+
+</div>
+
+{% endblock %}
+
+
+

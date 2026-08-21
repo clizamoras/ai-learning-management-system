@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}CREATE QUIZ{% endblock %}
+
+{% block content %}
+<div class="lesson-container">
+    <h2>CREATE QUIZ</h2>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Create Quiz</button>
+    </form>
+    <a href="{% url 'TeacherDashBoard' %}" class="back-btn">Back To Teacher DashBoard</a>
+</div>
+{% endblock %}

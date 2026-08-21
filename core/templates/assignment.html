@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{% block title %}CREATE ASSIGNMENT{% endblock %}</title>
+    </head>
+    <body>
+        {% block content %}
+        <div class="lesson-container">
+        <h2>CREATE ASSIGNMENT</h2>
+        <form method="POST" >
+            {% csrf_token %}
+            {{form.as_p}}
+            <button type="submit">Create Assignment</button>
+        </form>
+        <br>
+        <a href="{% url 'TeacherDashBoard' %}" class="back-btn">Back To Teacher DashBoard</a>
+        </div>
+        {% endblock %}
+    </body>
+</html>

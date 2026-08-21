@@ -1,0 +1,347 @@
+{% extends 'base.html' %}
+
+{% block title %}Course Detail{% endblock %}
+
+{% block content %}
+
+<div class="course-detail-page">
+
+    <!-- LEFT SIDE : COURSE INFORMATION -->
+    <div class="course-overview">
+
+        <div class="course-badge">COURSE</div>
+
+        <h1 id="course-name">{{ course.name }}</h1>
+
+        <div class="course-code">
+            Course Code:
+            <span id="course-code">{{ course.code }}</span>
+        </div>
+
+        <div class="teacher-info">
+            <span class="teacher-icon">👩‍🏫</span>
+
+            <div>
+                <small>Instructor</small>
+                <strong>{{ course.teacher.user.username }}</strong>
+            </div>
+        </div>
+
+        <div class="course-summary">
+
+            <div class="summary-item">
+                <span>📚</span>
+                <div>
+                    <strong>{{ lessons|length }}</strong>
+                    <small>Lessons</small>
+                </div>
+            </div>
+
+            <div class="summary-item">
+                <span>📝</span>
+                <div>
+                    <strong>{{ assignments|length }}</strong>
+                    <small>Assignments</small>
+                </div>
+            </div>
+
+            <div class="summary-item">
+                <span>🧠</span>
+                <div>
+                    <strong>{{ quizes|length }}</strong>
+<small>Quizzes</small>
+                </div>
+            </div>
+
+        </div>
+
+        <a href="{% url 'StudentDashBoard' %}" class="course-back-btn">
+            ← Back to Dashboard
+        </a>
+
+    </div>
+
+
+    <!-- RIGHT SIDE : COURSE CONTENT -->
+    <div class="course-content-panel">
+
+        <div class="content-heading">
+
+            <div>
+                <h2>Course Content</h2>
+                <p>Explore the learning materials for this course</p>
+            </div>
+
+            <div class="content-icon">📖</div>
+
+        </div>
+
+
+        <!-- LESSONS -->
+        <div class="content-group">
+
+            <div class="group-title">
+
+                <span class="group-icon lesson-icon">📚</span>
+
+                <div>
+                    <h3>Lessons</h3>
+                    <p>Course learning materials</p>
+                </div>
+
+            </div>
+
+
+            {% for lesson in lessons %}
+
+            <div class="content-card">
+
+                <div class="item-information">
+
+                    <div class="item-number">
+                        {{ forloop.counter }}
+                    </div>
+
+                    <div>
+                        <h4>{{ lesson.title }}</h4>
+                        <p>Lesson</p>
+                    </div>
+
+                </div>
+
+
+                <div class="item-actions">
+
+                    <a href="{% url 'ViewLesson'  %}"
+                       class="action-view">
+                        View Lesson
+                    </a>
+
+                </div>
+
+            </div>
+
+            {% empty %}
+
+            <div class="no-content">
+                <span>📭</span>
+                <p>No lessons available</p>
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+
+        <!-- ASSIGNMENTS -->
+        <div class="content-group">
+
+            <div class="group-title">
+
+                <span class="group-icon assignment-icon">📝</span>
+
+                <div>
+                    <h3>Assignments</h3>
+                    <p>Tasks and submissions</p>
+                </div>
+
+            </div>
+
+
+            {% for assignment in assignments %}
+
+            <div class="content-card">
+
+                <div class="item-information">
+
+                    <div class="item-number">
+                        {{ forloop.counter }}
+                    </div>
+
+                    <div>
+                        <h4>{{ assignment.title }}</h4>
+                        <p>Due: {{ assignment.duedate }}</p>
+                    </div>
+
+                </div>
+
+
+                <div class="item-actions">
+
+                    <a href="{% url 'SubmitAssignment'  %}"
+                       class="action-view">
+                        View Assignment
+                    </a>
+
+                </div>
+
+            </div>
+
+            {% empty %}
+
+            <div class="no-content">
+                <span>📭</span>
+                <p>No assignments available</p>
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+
+        <!-- QUIZZES -->
+        <div class="content-group">
+
+            <div class="group-title">
+
+                <span class="group-icon quiz-icon">🧠</span>
+
+                <div>
+                    <h3>Quizzes</h3>
+                    <p>Tests and assessments</p>
+                </div>
+
+            </div>
+
+
+            {% for quiz in quizes %}
+
+<div class="content-card">
+
+    <div class="item-information">
+
+        <div class="item-number">
+            {{ forloop.counter }}
+        </div>
+
+        <div>
+            <h4>{{ quiz.title }}</h4>
+            <p>Quiz</p>
+        </div>
+
+    </div>
+
+    <div class="item-actions">
+
+        <a href="{% url 'AttemptQuiz' quiz.pk %}"
+           class="action-view">
+            Attempt Quiz
+        </a>
+
+    </div>
+
+</div>
+
+{% empty %}
+
+<div class="no-content">
+    <span>📭</span>
+    <p>No quizzes available</p>
+</div>
+
+{% endfor %}
+        </div>
+
+
+        <!-- ANNOUNCEMENTS -->
+        <div class="content-group">
+
+            <div class="group-title">
+
+                <span class="group-icon announcement-icon">📢</span>
+
+                <div>
+                    <h3>Announcements</h3>
+                    <p>Important course updates</p>
+                </div>
+
+            </div>
+
+
+            {% for announcement in announcements %}
+
+            <div class="content-card">
+
+                <div class="item-information announcement-information">
+
+                    <div class="item-number">
+                        {{ forloop.counter }}
+                    </div>
+
+                    <div>
+                        <h4>{{ announcement.title }}</h4>
+                        <p>{{ announcement.content }}</p>
+                    </div>
+
+                </div>
+
+            </div>
+
+            {% empty %}
+
+            <div class="no-content">
+                <span>📭</span>
+                <p>No announcements available</p>
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    async function loadCourse() {
+
+        const response = await fetch("/course/api/");
+
+        const course = await response.json();
+
+        console.log(course);
+    }
+
+    loadCourse();
+
+
+    async function loadlessons() {
+
+        const response = await fetch("/lesson/api/");
+
+        const lessons = await response.json();
+
+        console.log(lessons);
+    }
+
+    loadlessons();
+
+
+    async function loadassignment() {
+
+        const response = await fetch("/assignment/api/");
+
+        const assignments = await response.json();
+
+        console.log(assignments);
+    }
+
+    loadassignment();
+
+
+    async function loadquiz() {
+
+        const response = await fetch("/quiz/api/");
+
+        const quizzes = await response.json();
+
+        console.log(quizzes);
+    }
+
+    loadquiz();
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,15 @@
+
+{% extends 'base.html' %}
+{% block title %}UPDATE ASSIGNMENT{% endblock %}
+{% block content %}
+    <div class="lesson-container">
+        <h2>UPDATE ASSIGNMENT</h2>
+        <form method="POST">
+            {% csrf_token %}
+            {{form.as_p}}
+
+            <button type="submit">Update Assignment</button>
+        </form>
+        <a href="{% url 'TeacherDashBoard' %}" class="back-btn">Back To Teacher DashBoard</a>
+    </div>
+{% endblock %}

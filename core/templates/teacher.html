@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{% block title %}TEACHER DASHBOARD{% endblock %}</title>
+    </head>
+    <body>
+       
+
+{% block content %}
+
+<div class="dashboard">
+
+    <!-- Header -->
+    <div class="dashboard-header">
+        <h1>Teacher Dashboard</h1>
+        <h3>Manage your courses, lessons, quizzes and students.</h3>
+    </div>
+
+    <section class="dashboard-section">
+
+        <h2>Quick Actions</h2>
+
+        <div class="action-grid">
+
+            <a href="{% url 'CreateCourse' %}" class="action-card">
+                <span>📚</span>
+                <h3>Create Course</h3>
+                <p>Add a new course</p>
+            </a>
+
+            <a href="{% url 'CreateLesson' %}" class="action-card">
+                <span>📖</span>
+                <h3>Create Lesson</h3>
+                <p>Add learning material</p>
+            </a>
+
+            <a href="{% url 'CreateAssignment' %}" class="action-card">
+                <span>📝</span>
+                <h3>Create Assignment</h3>
+                <p>Give students work</p>
+            </a>
+
+            <a href="{% url 'CreateQuiz' %}" class="action-card">
+                <span>❓</span>
+                <h3>Create Quiz</h3>
+                <p>Create a new quiz</p>
+            </a>
+
+            <a href="{% url 'CreateQuestion' %}" class="action-card">
+                <span>💡</span>
+                <h3>Create Question</h3>
+                <p>Add quiz questions</p>
+            </a>
+
+            <a href="{% url 'CreateOPtion' %}" class="action-card">
+                <span>☑️</span>
+                <h3>Create Option</h3>
+                <p>Add answer choices</p>
+            </a>
+
+            <a href="{% url 'CreateAnnouncement' %}" class="action-card">
+                <span>📢</span>
+                <h3>Announcement</h3>
+                <p>Notify your students</p>
+            </a>
+
+            <a href="{% url 'StudentSubmission' %}" class="action-card">
+                <span>📂</span>
+                <h3>Submissions</h3>
+                <p>View student work</p>
+            </a>
+
+            <a href="{% url 'Progress' %}" class="action-card">
+                <span>📊</span>
+                <h3>Progress</h3>
+                <p>Track student progress</p>
+            </a>
+
+        </div>
+
+    </section>
+    <section class="dashboard-section">
+
+        <div class="section-heading">
+            <div>
+                <h2>My Courses</h2>
+                <p>Your created courses</p>
+            </div>
+
+            <a href="{% url 'CreateCourse' %}" class="create-button">
+                + New Course
+            </a>
+        </div>
+        <div class="course-grid">
+
+            {% for course in courses %}
+           
+            <div class="course-card">
+
+                <div class="course-icon">
+                    📚
+                </div>
+
+                <h3>{{ course.name }}</h3>
+
+                <p class="course-code">
+                    {{ course.code }}
+                </p>
+
+                <div class="course-actions">
+
+                    <a href="{% url 'CourseDetail' course.id %}" >
+                        View
+                    </a>
+
+                    <a href="{% url 'UpdateCourse' course.pk %}">
+                        Edit
+                    </a>
+
+                    <a href="{% url 'DeleteCourse' course.pk %}">
+                        Delete
+                    </a>
+                </div>
+            </div>
+            {% empty %}
+
+            <div class="empty-course">
+                <h3>No courses yet 🌱</h3>
+                <p>Create your first course to get started.</p>
+
+                <a href="{% url 'CreateCourse' %}">
+                    Create Course
+                </a>
+            </div>
+
+            {% endfor %}
+        </div>
+    </section>
+    <div class="logout-section">
+
+        <h3>Do You Wish To Logout?</h3>
+
+        <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit">Logout</button>
+        </form>
+
+      </div>
+
+    </div>
+
+        {% endblock %}
+    </body>
+</html>

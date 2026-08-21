@@ -1,0 +1,12 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{%block title %}AI Learning Management System {% endblock %}</title>
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    </head>
+    <body>
+        {% block content %}
+        {% endblock %}
+    </body>
+</html>

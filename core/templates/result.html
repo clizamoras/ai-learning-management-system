@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block title %}RESULTS{% endblock %}
+{% block content %}
+<div class="submission-container">
+
+    <div class="submission-header">
+        <h2>RESULTS</h2>
+        <p>View results for your students.</p>
+    </div>
+    <div class="submission-list">
+         {% for result in results %}
+        <div class="submission-card">
+          <div class="submission-top">
+                <h3>Quiz:{{result.quiz.title}}</h3>
+                
+            </div>
+        <div class="submission-details">
+
+                <div class="detail">
+                    <p>Score:{{result.score}}</p>
+                <p>Attempted DAte: {{result.attempted_date}}</p>
+                    
+                </div>
+                <div class="detail">
+                    
+                </div>
+               </div>
+        </div>
+        {% empty %}
+
+        <div class="empty-submission">
+            <h3>No Results Available</h3>
+            <p>Your students haven't taken any quizzes yet.</p>
+        </div>
+
+        {% endfor %}
+    </div>
+
+    <a href="{% url 'StudentDashBoard' %}" class="back-btn">
+         Back to Student Dashboard
+    </a>
+
+</div>
+
+{% endblock %}
+          
+ 

@@ -1,0 +1,92 @@
+
+{% extends 'base.html' %}
+
+{% block title %}STUDENT SUBMISSIONS{% endblock %}
+
+{% block content %}
+
+<div class="submission-container">
+
+    <div class="submission-header">
+        <h2>Student Submissions</h2>
+        <p>View and manage assignments submitted by your students.</p>
+    </div>
+
+    <div class="submission-list">
+
+        {% for submission in submissions %}
+
+        <div class="submission-card">
+
+            <div class="submission-top">
+                <h3>{{ submission.assignment.title }}</h3>
+                <span>Submitted</span>
+            </div>
+
+            <div class="submission-details">
+
+                <div class="detail">
+                    <strong>Student</strong>
+                    <p>{{ submission.student.user.username }}</p>
+                </div>
+
+                <div class="detail">
+                    <strong>Submitted On</strong>
+                    <p>{{ submission.submitteddate }}</p>
+                </div>
+
+            </div>
+
+            <a href="{{ submission.file.url }}"
+               target="_blank"
+               class="file-btn">
+                View Submitted File
+            </a>
+            
+            <div class="grading-section">
+
+    <div class="grading-label">
+        <span>📝</span>
+        <strong>Grade Submission</strong>
+    </div>
+
+    <form method="POST" action="{% url 'GiveMarks' submission.id %}" class="grading-form">
+        {% csrf_token %}
+
+        <div class="marks-input">
+            <input type="number"
+                   name="marks"
+                   value="{{ submission.marks|default:'' }}"
+                   min="0"
+                   placeholder="Enter marks">
+
+            <span>/ 10</span>
+        </div>
+
+        <button type="submit" class="save-marks-btn">
+            Save Marks
+        </button>
+    </form>
+
+</div>
+        </div>
+
+        {% empty %}
+
+        <div class="empty-submission">
+            <h3>No Assignments Submitted</h3>
+            <p>Your students haven't submitted any assignments yet.</p>
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+    <a href="{% url 'TeacherDashBoard' %}" class="back-btn">
+         Back to Teacher Dashboard
+    </a>
+
+</div>
+
+{% endblock %}
+
