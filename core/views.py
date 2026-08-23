@@ -13,27 +13,44 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from .permissions import *
 import ollama
+from .forms import *
 
 # Create your views here.
 class Login(LoginView):
-    template_name='login.html'
-    redirect_authenticated_user=True
+    template_name = 'login.html'
 
-    def get_success_url(self):    # decides after login where to go 
-        if hasattr(self.request.user,'teacherprofile'):
+    def get_success_url(self):
+        if hasattr(self.request.user, 'teacherprofile'):
             return reverse_lazy('TeacherDashBoard')
-        return reverse_lazy('StudentDashBoard')
-
+        else:
+            return reverse_lazy('StudentDashBoard')
+    
 class Logout(LogoutView):
     next_page='login'
 
 class Register(FormView):
-    template_name='register.html'
-    form_class=UserCreationForm
-    success_url=reverse_lazy('login') # after register we have to go to login (reverse_lazy is used to find the url through the name)
+    template_name = 'register.html'
+    form_class = RegisterForm
+    success_url = reverse_lazy('login')
 
-    def form_valid(self,form):
-        form.save()
+    def form_valid(self, form):
+        user = form.save()
+
+        if form.cleaned_data['role'] == 'student':
+            StudentProfile.objects.create(
+                user=user,
+                dept=form.cleaned_data['dept'],
+                sem=form.cleaned_data['sem'],
+                dob=form.cleaned_data['dob']
+            )
+        else:
+            TeacherProfile.objects.create(
+                user=user,
+                dept=form.cleaned_data['dept'],
+                dob=form.cleaned_data['dob'],
+                yof=form.cleaned_data['yof']
+            )
+
         return super().form_valid(form)
 
 class TeacherDashBoard(LoginRequiredMixin,ListView):
@@ -48,7 +65,7 @@ class CreateCourse(CreateView):
     model=Course
     template_name='course.html'
     fields=['name','code']
-    success_url="/" # it send u to home
+    success_url=reverse_lazy('TeacherDashBoard')
 
     def dispatch(self,request,*args,**kwargs):
         if not hasattr(request.user,'teacherprofile'):
@@ -63,7 +80,8 @@ class CreateLesson(CreateView):
     model=Lesson
     template_name='lesson.html'  
     fields=['course','title','video','notes']
-    success_url="/"
+    success_url=reverse_lazy('TeacherDashBoard')
+  
 
     def dispatch(self,request,*args,**kwargs):
         if not hasattr(request.user,'teacherprofile'):
@@ -78,7 +96,8 @@ class CreateAssignment(CreateView):
     model=Assignment
     template_name='assignment.html'
     fields=['course','title','description','duedate']
-    success_url="/"
+    success_url=reverse_lazy('TeacherDashBoard')
+    
 
     def dispatch(self,request,*args,**kwargs):
         if not hasattr(request.user,'teacherprofile'):
@@ -93,7 +112,8 @@ class CreateQuiz(CreateView):
     model=Quiz
     template_name='quiz.html'
     fields=['course','title','duedate']
-    success_url="/"
+    success_url=reverse_lazy('TeacherDashBoard')
+    
 
     def dispatch(self,request,*args,**kwargs):
         if not hasattr(request.user,'teacherprofile'):
@@ -139,7 +159,8 @@ class CreateQuestion(CreateView):
     template_name='question.html'
     model=Question
     fields=['quiz','question','marks']
-    success_url="/"
+    success_url=reverse_lazy('TeacherDashBoard')
+    
 
     def dispatch(self,request,*args,**kwargs):
         if not hasattr(request.user,'teacherprofile'):
@@ -155,7 +176,8 @@ class CreateOPtion(CreateView):
     model=Option
     template_name='option.html'
     fields=['question','option_text','is_correct']
-    success_url="/"
+    success_url=reverse_lazy('TeacherDashBoard')
+    
 
     def dispatch(self,request,*args,**kwargs):
         if not hasattr(request.user,'teacherprofile'):
@@ -170,7 +192,8 @@ class CreateAnnouncement(CreateView):
     model=Announcements
     template_name='announcements.html'
     fields=['course','title','content']
-    success_url="/"
+    success_url=reverse_lazy('TeacherDashBoard')
+    
 
     def dispatch(self,request,*args,**kwargs):
         if not hasattr(request.user,'teacherprofile'):
@@ -185,7 +208,8 @@ class TeacherProgress(CreateView):
     template_name = 'progress.html'
     model = Progress
     fields=['student','course','progresspercenatge','completedlesson']
-    success_url="/"
+    success_url=reverse_lazy('TeacherDashBoard')
+   
 
     def get_form(self, form_class = None):
         form= super().get_form(form_class)
@@ -243,7 +267,8 @@ class SubmitAssignment(CreateView):
     model=Submission
     template_name='subassign.html'
     fields=['assignment','file']
-    success_url="/"
+    success_url=reverse_lazy('StudentDashBoard')
+    
 
     def dispatch(self,request,*args,**kwargs):
         if not hasattr(request.user,'studentprofile'):
@@ -329,7 +354,7 @@ class CreateEnrollement(CreateView):
     model=Enrollment
     template_name='enroll.html'
     fields=['course']
-    success_url="/"
+    success_url=reverse_lazy('StudentDashBoard')
     
     def form_valid(self,form):
         form.instance.student=self.request.user.studentprofile
@@ -356,7 +381,7 @@ class UpdateCourse(UpdateView):
     model=Course
     template_name='updatecourse.html'
     fields=['name','code']
-    success_url="/"
+    success_url=reverse_lazy('TeacherDashBoard')
 
     def dispatch(self,request,*args,**kwargs):
         if not hasattr(request.user,'teacherprofile'):
@@ -369,7 +394,7 @@ class UpdateCourse(UpdateView):
 class DeleteCourse(DeleteView):
     model=Course
     template_name='deletecourse.html'
-    success_url="/"
+    success_url=reverse_lazy('TeacherDashBoard')
 
     def dispatch(self,request,*args,**kwargs):
         if not hasattr(request.user,'teacherprofile'):
@@ -382,7 +407,7 @@ class UpdateAssignment(UpdateView):
     model=Assignment
     template_name='updateassignment.html'
     fields=['title','description','duedate']
-    success_url="/"
+    success_url=reverse_lazy('TeacherDashBoard')
 
     def dispatch(self,request,*args,**kwargs):
         if not hasattr(request.user,'teacherprofile'):
@@ -395,7 +420,7 @@ class UpdateAssignment(UpdateView):
 class DeleteAssignment(DeleteView):
     model=Assignment
     template_name='deleteassignment.html'
-    success_url="/"
+    success_url=reverse_lazy('TeacherDashBoard')
 
     def dispatch(self,request,*args,**kwargs):
         if not hasattr(request.user,'teacherprofile'):
@@ -409,7 +434,7 @@ class DeleteAssignment(DeleteView):
 class DeleteLesson(DeleteView):
     model=Lesson
     template_name='deletelesson.html'
-    success_url="/"
+    success_url=reverse_lazy('TeacherDashBoard')
 
     def dispatch(self,request,*args,**kwargs):
         if not hasattr(request.user,'teacherprofile'):
@@ -424,7 +449,7 @@ class UpdateLesson(UpdateView):
     model=Lesson
     template_name='updatelesson.html'
     fields=['title','video','notes']
-    success_url="/"
+    success_url=reverse_lazy('TeacherDashBoard')
 
     def dispatch(self,request,*args,**kwargs):
         if not hasattr(request.user,'teacherprofile'):
@@ -436,7 +461,7 @@ class UpdateLesson(UpdateView):
 class DeleteQuiz(DeleteView):
     model=Quiz
     template_name='deletequiz.html'
-    success_url="/"
+    success_url=reverse_lazy('TeacherDashBoard')
 
     def dispatch(self,request,*args,**kwargs):
         if not hasattr(request.user,'teacherprofile'):
@@ -449,7 +474,7 @@ class UpdateQuiz(UpdateView):
     model=Quiz
     template_name='updatequiz.html'
     fields=['title','duedate']
-    success_url="/"
+    success_url=reverse_lazy('TeacherDashBoard')
 
     def dispatch(self,request,*args,**kwargs):
         if not hasattr(request.user,'teacherprofile'):
@@ -461,7 +486,7 @@ class UpdateQuiz(UpdateView):
 class DeleteAnnouncement(DeleteView):
     model=Announcements
     template_name='deleteannouncement.html'
-    success_url="/"
+    success_url=reverse_lazy('TeacherDashBoard')
     def dispatch(self,request,*args,**kwargs):
         if not hasattr(request.user,'teacherprofile'):
             return redirect('StudentDashBoard')
@@ -472,7 +497,7 @@ class UpdateAnnouncement(UpdateView):
     model=Announcements
     template_name='updateannouncement.html'
     fields=['title','content']
-    success_url="/"
+    success_url=reverse_lazy('TeacherDashBoard')
     def dispatch(self,request,*args,**kwargs):
         if not hasattr(request.user,'teacherprofile'):
             return redirect('StudentDashBoard')

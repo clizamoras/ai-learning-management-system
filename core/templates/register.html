@@ -11,6 +11,7 @@
     <form method="POST">
         {% csrf_token %}
         {{ form.as_p }}
+         {{ form.errors }}
 
         <button type="submit">REGISTER</button>
     </form>

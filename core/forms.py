@@ -1,6 +1,7 @@
 from django import forms
-from .models import StudentProfile, TeacherProfile,Course,Lesson,Assignment,Submission,Quiz,Question,Progress
-
+from .models import *
+from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
 class StudentProfileForm(forms.ModelForm):
     class Meta:
         model = StudentProfile
@@ -44,3 +45,30 @@ class Progress(forms.ModelForm):
     class Meta:
         model=Progress
         fields='__all__'
+
+class RegisterForm(UserCreationForm):
+
+    role = forms.ChoiceField(
+        choices=[('student', 'Student'), ('teacher', 'Teacher')]
+    )
+
+    dept = forms.CharField()
+    dob = forms.DateField(
+        widget=forms.DateInput(attrs={'type': 'date'})
+    )
+
+    sem = forms.CharField(required=False)
+    yof = forms.CharField(required=False)
+
+    class Meta:
+        model = User
+        fields = [
+            'username',
+            'password1',
+            'password2',
+            'role',
+            'dept',
+            'sem',
+            'dob',
+            'yof'
+        ]
