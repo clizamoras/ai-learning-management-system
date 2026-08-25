@@ -18,7 +18,7 @@ from .forms import *
 # Create your views here.
 class Login(LoginView):
     template_name = 'login.html'
-    redirect_authenticated_user=True
+    
     def get_success_url(self):
         if hasattr(self.request.user, 'teacherprofile'):
             return reverse_lazy('TeacherDashBoard')
