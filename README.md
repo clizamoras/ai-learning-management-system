@@ -1,68 +1,45 @@
 # AI-Powered Learning Management System
 
-A web-based Learning Management System built with **Django** to help students and teachers manage courses, lessons, assignments, quizzes, and learning progress.
+A web-based Learning Management System developed using **Python and Django** to support online learning and academic management.
 
-The project also includes an **AI Learning Assistant** using **Ollama and Gemma** to help students understand academic and programming concepts.
+## 🚀 Live Demo
 
-## Features
+**[View Live Project](YOUR-RENDER-URL)**
 
-### Student
+## ✨ Features
 
-* Register and login
-* Enroll in courses
-* Access lessons, videos, and notes
-* Submit assignments
-* Attempt quizzes
-* View results and progress
-* Ask questions using the AI assistant
+* Student and teacher authentication
+* Course and lesson management
+* Video and notes access
+* Assignment submission
+* Online quizzes
+* Student progress tracking
+* Announcements
+* AI-powered learning assistant
+* Django admin panel
 
-### Teacher
+## 🛠️ Technologies Used
 
-* Create and manage courses
-* Add lessons and learning materials
-* Create assignments and quizzes
-* View student submissions
-* Manage announcements and progress
+* **Python**
+* **Django**
+* **HTML5**
+* **CSS3**
+* **JavaScript**
+* **SQLite**
+* **AI API**
+* **Git & GitHub**
+* **Render**
 
-### AI Assistant
-
-* Academic question answering
-* Simple explanations
-* Programming help
-* Conversation history
-* Streaming AI responses
-
-## Technologies
-
-* Python
-* Django
-* Django REST Framework
-* HTML, CSS, JavaScript
-* SQLite
-* Ollama & Gemma
-* Git & GitHub
-
-## Run Locally
+## 💻 Run Locally
 
 ```bash
-git clone https://github.com/clizamoras/ai-learning-management-system.git
+git clone YOUR-GITHUB-REPOSITORY-URL
 cd ai-learning-management-system
-python -m venv venv
-venv\Scripts\activate
 pip install -r requirements.txt
 python manage.py migrate
 python manage.py runserver
 ```
 
-Create a `.env` file containing your Django `SECRET_KEY` and `DEBUG` setting before running the project.
+## 🚀 Live Demo
 
-## Project Status
-
-Currently being prepared for deployment.
-
-## Future Improvements
-
-* Cloud deployment
-* PostgreSQL database
-* Online AI assistant
-* Improved analytics and UI
+[View Live Project](https://ai-learning-management-system-kt2s.onrender.com/)
