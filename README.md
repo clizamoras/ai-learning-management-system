@@ -4,7 +4,7 @@ A web-based Learning Management System developed using **Python and Django** to 
 
 ## 🚀 Live Demo
 
-**[View Live Project](YOUR-RENDER-URL)**
+[View Live Project](https://ai-learning-management-system-kt2s.onrender.com/)
 
 ## ✨ Features
 
@@ -40,6 +40,6 @@ python manage.py migrate
 python manage.py runserver
 ```
 
-## 🚀 Live Demo
 
-[View Live Project](https://ai-learning-management-system-kt2s.onrender.com/)
+
+
