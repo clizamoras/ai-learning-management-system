@@ -12,7 +12,8 @@ from .serializers import *
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from .permissions import *
-import ollama
+from google import genai
+import os
 from .forms import *
 
 # Create your views here.
@@ -916,10 +917,10 @@ class ProgressAPI(APIView):
         return Response({"message":"Progress Deleted"})
 
 # clear chat -> getting chat history -> adding the question to the chat -> finding out the answer -> saving that particular session
-
+client = genai.Client(api_key=os.environ.get("GEMINI_API_KEY"))
 def assistant(request):
 
-    # Clear chat this is the name given for the html button -> clear_chat
+    # Clear chat
     if request.method == "POST" and request.POST.get("clear_chat"):
 
         request.session["ai_messages"] = []
@@ -928,13 +929,13 @@ def assistant(request):
         return redirect("assistant")
 
 
-    # Get chat history if there is no history it gives []
+    # Get chat history
     messages = request.session.get("ai_messages", [])
 
-   # POST means the user has submitted something through the form
 
+    # User submits question
     if request.method == "POST":
-    # gets the question is there is no question then "" ans strip i sused to remove unneccessary whitespaces from the beginning and end.
+
         question = request.POST.get("question", "").strip()
 
         if question:
@@ -946,30 +947,39 @@ def assistant(request):
             })
 
 
-            # Send conversation to Ollama
-            response = ollama.chat(
-                model="gemma3:1b",
+            # Create prompt
+            prompt = """
+You are an AI learning assistant.
 
-                messages=[
-                    {
-                        "role": "system",
-                       "content": """
-                            You are an AI learning assistant.
+Explain concepts simply and clearly.
+Keep answers short and beginner-friendly.
+Use examples only when useful.
+For simple questions, answer in 3-5 sentences.
+For programming questions, explain the logic briefly.
+Avoid unnecessary details.
 
-                            Explain concepts simply and clearly.
-                            Keep answers short and beginner-friendly.
-                            Use examples only when useful.
-                            For simple questions, answer in 3-5 sentences.
-                            For programming questions, explain the logic briefly.
-                            Avoid unnecessary details.
-                        """
-                    }
-                ] + messages
+Conversation:
+"""
+
+
+            # Add previous conversation
+            for message in messages:
+
+                prompt += (
+                    f"\n{message['role']}: "
+                    f"{message['content']}"
+                )
+
+
+            # Send to Gemini
+            response = client.models.generate_content(
+                 model="gemini-3.5-flash-lite",
+                contents=prompt
             )
 
 
             # Get AI answer
-            answer = response["message"]["content"]
+            answer = response.text
 
 
             # Add AI answer
