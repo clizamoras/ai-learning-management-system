@@ -41,10 +41,10 @@ class QuestionForm(forms.ModelForm):
     class Meta:
         model = Question
         fields = '__all__'
-class Progress(forms.ModelForm):
+class ProgressForm(forms.ModelForm):
     class Meta:
-        model=Progress
-        fields='__all__'
+        model = Progress
+        fields = '__all__'
 
 class RegisterForm(UserCreationForm):
 

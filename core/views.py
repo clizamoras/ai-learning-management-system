@@ -207,17 +207,18 @@ class CreateAnnouncement(CreateView):
 class TeacherProgress(CreateView):
     template_name = 'progress.html'
     model = Progress
-    fields=['student','course','progresspercenatge','completedlesson']
-    success_url=reverse_lazy('TeacherDashBoard')
-   
+    fields = ['student', 'course', 'progresspercenatge', 'completedlesson']
+    success_url = reverse_lazy('TeacherDashBoard')
 
-    def get_form(self, form_class = None):
-        form= super().get_form(form_class)
-        form.fields['course'].queryset=Course.objects.filter(teacher__user=self.request.user)
-        return form 
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        form.fields['course'].queryset = Course.objects.filter(
+            teacher__user=self.request.user
+        )
+        return form
 
-    def dispatch(self,request,*args,**kwargs):
-        if not hasattr(request.user,'teacherprofile'):
+    def dispatch(self, request, *args, **kwargs):
+        if not hasattr(request.user, 'teacherprofile'):
             return redirect('StudentDashBoard')
         return super().dispatch(request, *args, **kwargs)
    
