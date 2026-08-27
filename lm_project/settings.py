@@ -91,9 +91,15 @@ WSGI_APPLICATION = 'lm_project.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
+DATABASE_URL = os.environ.get("DATABASE_URL_POOLED")
+
+if not DATABASE_URL:
+    raise RuntimeError("DATABASE_URL_POOLED is not set")
+
 DATABASES = {
-    'default': dj_database_url.config(
-        default=os.environ.get('DATABASE_URL_POOLED')
+    "default": dj_database_url.parse(
+        DATABASE_URL,
+        conn_max_age=600,
     )
 }
 
