@@ -144,14 +144,19 @@
 
         <div class="quiz-card">
 
-            <div>
-                <h3>{{ subassign.assignment.title }}</h3>
-                <p>marks for the assignment :{{subassign.marks}}</p>
-                <p>{{ subassign.submitteddate}}</p>
-                <a href="{{subassign.file.url}}" target="_blank" class="back-btn">
-                    📄 Submitted File
-                </a>
-            </div>
+        <div>
+    <h3>{{ subassign.assignment.title }}</h3>
+    <p>Marks for the assignment: {{ subassign.marks }}</p>
+    <p>{{ subassign.submitteddate }}</p>
+
+    {% if subassign.file %}
+        <a href="{{ subassign.file.url }}"
+           target="_blank"
+           class="back-btn">
+            📄 Submitted File
+        </a>
+    {% endif %}
+</div>
 
         </div>
 
