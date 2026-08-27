@@ -2,9 +2,7 @@
 
 A web-based Learning Management System developed using **Python and Django** to support online learning and academic management.
 
-## 🚀 Live Demo
 
-[View Live Project](https://ai-learning-management-system-kt2s.onrender.com/)
 
 ## ✨ Features
 
